@@ -18,12 +18,12 @@ WORKDIR /tmp
  	perl \
  	init-system-helpers
 
-RUN if [ ${ARCH} = "arm" ]; then \
+RUN if [ ${DOCKER_ARCH} = "arm" ]; then \
 		echo "Downloading arm version" && \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb" \
 		; else \
 		echo "Downloading ${ARCH} version" && \
-		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_${ARCH}.deb" \
+		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_${DOCKER_ARCH}.deb" \
 	;fi
 
 RUN echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \

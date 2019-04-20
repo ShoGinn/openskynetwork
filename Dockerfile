@@ -23,7 +23,7 @@ RUN if [ ${ARCH} = "arm" ]; then \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb" \
 	;fi
 
-RUN	if [ ${ARCH} = "aarch64" ]; then \
+RUN	if [ ${ARCH} = "aarch64" -o ${ARCH} = "arm64" ]; then \
 	echo "Downloading arm64 version" && \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb" \
 	;fi

@@ -16,22 +16,22 @@ RUN	DEBIAN_FRONTEND=noninteractive apt-get update \
 	ca-certificates \
 	curl \
 	perl \
-	init-system-helpers \
-	&& \
-	if [ ${ARCH} = "arm" ]; then \
+	init-system-helpers
+
+RUN if [ ${ARCH} = "arm" ]; then \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb" \
 		; else \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_${ARCH}.deb" \
-	;fi \
-	&& \
-	echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
+	;fi
+
+RUN echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/longitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/altitude string 1' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/username string' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/serial string' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/port string' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/host string' >> /tmp/preseed.txt; \
-	&& debconf-set-selections /tmp/preseed.txt \
+	debconf-set-selections /tmp/preseed.txt \
 	&& dpkg -i /tmp/opensky-feeder.deb \
 	&& DEBIAN_FRONTEND=noninteractive apt-get clean \
 	&& rm -rf \

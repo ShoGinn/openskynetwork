@@ -11,16 +11,18 @@ ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /tmp
 
-RUN	DEBIAN_FRONTEND=noninteractive apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-	ca-certificates \
-	curl \
-	perl \
-	init-system-helpers
+ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+ 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+ 	ca-certificates \
+ 	curl \
+ 	perl \
+ 	init-system-helpers
 
 RUN if [ ${ARCH} = "arm" ]; then \
+		echo "Downloading arm version" && \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb" \
 		; else \
+		echo "Downloading ${ARCH} version" && \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_${ARCH}.deb" \
 	;fi
 

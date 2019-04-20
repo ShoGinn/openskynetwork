@@ -21,16 +21,16 @@ WORKDIR /tmp
 RUN set -ex; \
     if [ ${ARCH} = "arm" ]; then \
 		echo "Downloading arm version" ; \
-		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb" \
-	;fi \
+		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
+	fi; \
     if [ ${ARCH} = "aarch64" -o ${ARCH} = "arm64" ]; then \
 	echo "Downloading arm64 version" ; \
-		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb" \
-	;fi \
+		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb"; \
+	fi; \
     if [ ${ARCH} = "amd64" ]; then \
 	echo "Downloading amd64 version" ; \
-		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb" \
-	;fi \
+		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
+	fi; \
     echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/longitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/altitude string 1' >> /tmp/preseed.txt; \

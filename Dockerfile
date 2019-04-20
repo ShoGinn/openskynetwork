@@ -11,20 +11,22 @@ ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /tmp
 
-COPY openskydl.sh .
+COPY openskydl.sh /tmp/
 
 RUN \
- DEBIAN_FRONTEND=noninteractive apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
- 	ca-certificates \
- 	perl \
- 	init-system-helpers \
- && openskydl.sh \
- && debconf-set-selections /tmp/preseed.txt \
- && dpkg -i /tmp/opensky-feeder.deb \
- && DEBIAN_FRONTEND=noninteractive apt-get clean \
- && rm -rf \
-    /tmp/* \
+	DEBIAN_FRONTEND=noninteractive apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+	ca-certificates \
+	perl \
+	init-system-helpers
+
+RUN \
+	/tmp/openskydl.sh \
+	&& debconf-set-selections /tmp/preseed.txt \
+	&& dpkg -i /tmp/opensky-feeder.deb \
+	&& DEBIAN_FRONTEND=noninteractive apt-get clean \
+	&& rm -rf \
+	/tmp/* \
     /var/lib/apt/lists/* \
     /var/tmp/*
 

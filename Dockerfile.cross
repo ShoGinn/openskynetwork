@@ -7,15 +7,14 @@ ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive ARCH=$TARGETARCH
 
 WORKDIR /tmp
 
- RUN DEBIAN_FRONTEND=noninteractive apt-get update \
- 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
- 	ca-certificates \
- 	curl \
- 	perl \
- 	init-system-helpers
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+	ca-certificates \
+	curl \
+	perl \
+	init-system-helpers
 
-RUN set -ex; \
-    if [ ${ARCH} = "arm" ]; then \
+RUN if [ ${ARCH} = "arm" ]; then \
 		echo "Downloading arm version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
 	fi; \
@@ -26,8 +25,8 @@ RUN set -ex; \
     if [ ${ARCH} = "amd64" ]; then \
 	echo "Downloading amd64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
-	fi; \
-    echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
+	fi;
+RUN echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/longitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/altitude string 1' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/username string' >> /tmp/preseed.txt; \

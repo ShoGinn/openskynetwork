@@ -27,6 +27,7 @@ docker login --username $DOCKER_USER --password $DOCKER_PASS
 
 # Push multi-arch image
 buildctl build --frontend dockerfile.v0 \
+      --progress=plain \
       --local dockerfile=. \
       --local context=. \
       --output type=image,name=docker.io/$REPO:$BUILD,push=true \
@@ -40,6 +41,7 @@ for arch in $architectures
 do
 # Build for all architectures and push manifest
   buildctl build --frontend dockerfile.v0 \
+      --progress=plain \
       --local dockerfile=. \
       --local context=. \
       --output type=image,name=docker.io/$REPO:$BUILD-$arch,push=true \

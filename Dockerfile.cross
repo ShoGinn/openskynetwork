@@ -1,4 +1,5 @@
 ARG BASE=debian:stretch-slim
+ARG TARGETARCH
 
 FROM --platform=$TARGETPLATFORM $BASE
 

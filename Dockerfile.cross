@@ -5,8 +5,6 @@ ARG TARGETARCH
 
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 
-RUN /usr/bin/env
-
 WORKDIR /tmp
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -16,15 +14,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	perl \
 	init-system-helpers
 
-RUN if [ "x${TARGETARCH}" = "xarm" ]; then \
+RUN if [ "${TARGETARCH}" = "arm" ]; then \
 		echo "Downloading arm version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
 	fi; \
-    if [ "x${TARGETARCH}" = "xaarch64" -o "x${TARGETARCH}" = "xarm64" ]; then \
+    if [ "${TARGETARCH}" = "aarch64" -o "${TARGETARCH}" = "arm64" ]; then \
 	echo "Downloading arm64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb"; \
 	fi; \
-    if [ "x${TARGETARCH}" = "xamd64" ]; then \
+    if [ "${TARGETARCH}" = "amd64" ]; then \
 	echo "Downloading amd64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
 	fi;

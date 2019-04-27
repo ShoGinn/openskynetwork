@@ -1,11 +1,6 @@
 ARG BASE=debian:stretch-slim
 
-FROM $BASE
-
-ARG arch=none
-ENV ARCH=$arch
-
-COPY qemu/qemu-$ARCH-static* /usr/bin/
+FROM --platform=$TARGETPLATFORM $BASE
 
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 
@@ -19,15 +14,15 @@ WORKDIR /tmp
  	init-system-helpers
 
 RUN set -ex; \
-    if [ ${ARCH} = "arm" ]; then \
+    if [ ${TARGETARCH} = "arm" ]; then \
 		echo "Downloading arm version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
 	fi; \
-    if [ ${ARCH} = "aarch64" -o ${ARCH} = "arm64" ]; then \
+    if [ ${TARGETARCH} = "aarch64" -o ${TARGETARCH} = "arm64" ]; then \
 	echo "Downloading arm64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb"; \
 	fi; \
-    if [ ${ARCH} = "amd64" ]; then \
+    if [ ${TARGETARCH} = "amd64" ]; then \
 	echo "Downloading amd64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
 	fi; \

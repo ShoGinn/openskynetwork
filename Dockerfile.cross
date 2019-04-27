@@ -3,7 +3,7 @@ ARG TARGETARCH
 
 FROM --platform=$TARGETPLATFORM $BASE
 
-ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive TARGETARCH=$TARGETARCH
+ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive ARCH=$TARGETARCH
 
 WORKDIR /tmp
 
@@ -15,15 +15,15 @@ WORKDIR /tmp
  	init-system-helpers
 
 RUN set -ex; \
-    if [ $TARGETARCH = "arm" ]; then \
+    if [ ${ARCH} = "arm" ]; then \
 		echo "Downloading arm version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
 	fi; \
-    if [ $TARGETARCH = "aarch64" -o $TARGETARCH = "arm64" ]; then \
+    if [ ${ARCH} = "aarch64" -o ${ARCH} = "arm64" ]; then \
 	echo "Downloading arm64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb"; \
 	fi; \
-    if [ $TARGETARCH = "amd64" ]; then \
+    if [ ${ARCH} = "amd64" ]; then \
 	echo "Downloading amd64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
 	fi; \

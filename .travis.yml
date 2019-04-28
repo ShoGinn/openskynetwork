@@ -19,27 +19,3 @@ git:
 # install qemu-user before running docker build
 before_install:
   - env
-  - |
-   if ! git diff --name-only $TRAVIS_BRANCH...HEAD | grep -qvE '(.md)|^(LICENSE)'
-   then
-     echo "Not running CI since only docs were changed."
-     exit
-   fi
-  - sudo docker run --privileged linuxkit/binfmt:v0.6
-  - sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr tcp://0.0.0.0:1234 --oci-worker-platform linux/amd64 --oci-worker-platform linux/armhf --oci-worker-platform linux/arm64
-  - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
-  - export BUILDKIT_HOST=tcp://0.0.0.0:1234
-
-script:
-  - bash ./travis/build.sh test-build
-
-deploy:
-  provider: script
-  script: bash ./travis/build.sh latest
-  skip_cleanup: true
-  on:
-    tags: true
-
-# Don't email me the results of the test runs.
-notifications:
-  email: false

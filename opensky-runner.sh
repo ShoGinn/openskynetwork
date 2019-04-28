@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 [[ ! -z ${DUMP1090_LAT} ]]       		&& debconf-set-selections <<< "opensky-feeder openskyd/latitude string ${DUMP1090_LAT}" || DUMP1090_LAT="1"
 [[ ! -z ${DUMP1090_LON} ]]       		&& debconf-set-selections <<< "opensky-feeder openskyd/longitude string ${DUMP1090_LON}" || DUMP1090_LON="1"

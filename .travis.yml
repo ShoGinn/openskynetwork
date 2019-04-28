@@ -12,10 +12,15 @@ addons:
     packages:
       - docker-ce
 
+# install qemu-user before running docker build
+before_install:
+  - |
+   if ! git diff --name-only $TRAVIS_BRANCH...HEAD | grep -qvE '(.md)|^(LICENSE)'
+   then
+     echo "Not running CI since only docs were changed."
+     exit
+   fi
+
 # Only clone the most recent commit.
 git:
   depth: 1
-
-# install qemu-user before running docker build
-before_install:
-  - env

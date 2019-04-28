@@ -7,8 +7,8 @@ ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /tmp
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
 	ca-certificates \
 	curl \
 	perl \
@@ -35,7 +35,7 @@ RUN echo 'opensky-feeder openskyd/latitude string 2' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/host string' >> /tmp/preseed.txt; \
 	debconf-set-selections /tmp/preseed.txt \
 	&& dpkg -i /tmp/opensky-feeder.deb \
-	&& DEBIAN_FRONTEND=noninteractive apt-get clean \
+	&& apt-get clean \
 	&& rm -rf \
 	/tmp/* \
     /var/lib/apt/lists/* \

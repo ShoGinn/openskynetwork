@@ -18,6 +18,7 @@ git:
 
 # install qemu-user before running docker build
 before_install:
+  - env
   - |
    if ! git diff --name-only $TRAVIS_BRANCH...HEAD | grep -qvE '(.md)|^(LICENSE)'
    then

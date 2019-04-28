@@ -1,18 +1,25 @@
 ARG BASE
-
-FROM --platform=$TARGETPLATFORM $BASE
-
+FROM $BASE AS base
 
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+	perl \
+	&& apt-get clean \
+	&& rm -rf \
+	/tmp/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
+
+FROM --platform=$TARGETPLATFORM $BASE as builder
 
 WORKDIR /tmp
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	ca-certificates \
-	curl \
-	perl \
-	init-system-helpers
+	curl
 
 # TARGETARCH is used to identify which version of opensky to download
 ARG TARGETARCH
@@ -35,10 +42,14 @@ RUN if [ "${TARGETARCH}" = "arm" ]; then \
 	echo 'opensky-feeder openskyd/username string' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/serial string' >> /tmp/preseed.txt; \
 	echo 'opensky-feeder openskyd/port string' >> /tmp/preseed.txt; \
-	echo 'opensky-feeder openskyd/host string' >> /tmp/preseed.txt; \
-	debconf-set-selections /tmp/preseed.txt \
+	echo 'opensky-feeder openskyd/host string' >> /tmp/preseed.txt;
+
+FROM base
+
+COPY --from=builder /tmp /tmp
+
+RUN debconf-set-selections /tmp/preseed.txt \
 	&& dpkg -i /tmp/opensky-feeder.deb \
-	&& apt-get clean \
 	&& rm -rf \
 	/tmp/* \
     /var/lib/apt/lists/* \
@@ -49,15 +60,19 @@ COPY opensky-runner.sh /usr/bin/opensky-runner.sh
 ENTRYPOINT ["opensky-runner.sh"]
 
 # Metadata
+ARG MAINTAINER
+ARG NAME
+ARG DESCRIPTION
+ARG URL
 ARG BUILD_DATE
 ARG VCS_URL
 ARG VCS_REF
 
-LABEL maintainer="ginnserv@gmail.com" \
-	org.label-schema.build-date=$BUILD_DATE \
-	org.label-schema.name="Docker ADS-B - openskynetwork" \
-	org.label-schema.description="Docker container for ADS-B - This is the opensky-network.org component" \
-	org.label-schema.url="https://github.com/ShoGinn/docker-ads-b" \
+LABEL maintainer="${MAINTAINER}" \
+	org.label-schema.build-date="${BUILD_DATE}" \
+	org.label-schema.name="${NAME}" \
+	org.label-schema.description="${DESCRIPTION}" \
+	org.label-schema.url="${URL}" \
 	org.label-schema.vcs-ref="${VCS_REF}" \
 	org.label-schema.vcs-url="${VCS_URL}" \
 	org.label-schema.schema-version="1.0"

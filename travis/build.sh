@@ -34,6 +34,10 @@ buildctl build --frontend dockerfile.v0 \
       --opt "build-arg:VCS_REF=$(git rev-parse --short HEAD)" \
       --opt "build-arg:VCS_URL=$(git config --get remote.origin.url)" \
       --opt "build-arg:BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+      --opt "build-arg:MAINTAINER=$MAINTAINER" \
+      --opt "build-arg:NAME=$NAME" \
+      --opt "build-arg:DESCRIPTION=$DESCRIPTION" \
+      --opt "build-arg:URL=$URL" \
       --opt filename=./Dockerfile.cross
 
 # Push image for every arch with arch prefix in tag
@@ -49,6 +53,10 @@ do
       --opt "build-arg:VCS_REF=$(git rev-parse --short HEAD)" \
       --opt "build-arg:VCS_URL=$(git config --get remote.origin.url)" \
       --opt "build-arg:BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+      --opt "build-arg:MAINTAINER=$MAINTAINER" \
+      --opt "build-arg:NAME=$NAME" \
+      --opt "build-arg:DESCRIPTION=$DESCRIPTION" \
+      --opt "build-arg:URL=$URL" \
       --opt filename=./Dockerfile.cross &
 done
 

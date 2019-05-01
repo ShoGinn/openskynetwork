@@ -2,8 +2,9 @@ FROM debian:stretch-slim AS base
 
 COPY rootfs /
 
+ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
+
 RUN \
-	export LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive && \
 	apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	iputils-ping \
@@ -20,7 +21,6 @@ FROM --platform=$TARGETPLATFORM debian:stretch-slim as builder
 WORKDIR /tmp
 
 RUN \
-	export LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive && \
 	apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	ca-certificates \

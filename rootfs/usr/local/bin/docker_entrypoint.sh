@@ -3,8 +3,8 @@
 set -o errexit          # Exit on most errors (see the manual)
 #set -o errtrace         # Make sure any error trap is inherited
 set -o nounset          # Disallow expansion of unset variables
-#set -o pipefail         # Use last non-zero exit code in a pipeline
-set -o xtrace          # Trace the execution of the script (debug)
+set -o pipefail         # Use last non-zero exit code in a pipeline
+#set -o xtrace          # Trace the execution of the script (debug)
 
 
 [[ ! -z ${DUMP1090_LAT} ]]       		&& debconf-set-selections <<< "opensky-feeder openskyd/latitude string ${DUMP1090_LAT}" || DUMP1090_LAT="1"
@@ -22,6 +22,6 @@ sleep 5s
 echo "Ping test to dump1090"
 ping -c 3 "${DUMP1090_SERVER}"
 
-/usr/bin/openskyd-dump1090
+exec /usr/bin/openskyd-dump1090
 
 exit ${?}

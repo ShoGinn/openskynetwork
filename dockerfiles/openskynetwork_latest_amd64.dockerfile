@@ -1,9 +1,10 @@
-ARG BASE
-FROM $BASE AS base
+FROM debian:stretch-slim AS base
 
-ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive
+COPY rootfs /
 
-RUN apt-get update \
+RUN \
+	export LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive && \
+	apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	iputils-ping \
 	dnsutils \
@@ -14,11 +15,13 @@ RUN apt-get update \
     /var/lib/apt/lists/* \
     /var/tmp/*
 
-FROM --platform=$TARGETPLATFORM $BASE as builder
+FROM --platform=$TARGETPLATFORM debian:stretch-slim as builder
 
 WORKDIR /tmp
 
-RUN apt-get update \
+RUN \
+	export LC_ALL=C.UTF-8 LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive && \
+	apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	ca-certificates \
 	curl
@@ -57,24 +60,4 @@ RUN debconf-set-selections /tmp/preseed.txt \
     /var/lib/apt/lists/* \
     /var/tmp/*
 
-COPY opensky-runner.sh /usr/bin/opensky-runner.sh		
-
-ENTRYPOINT ["opensky-runner.sh"]
-
-# Metadata
-ARG MAINTAINER
-ARG NAME
-ARG DESCRIPTION
-ARG URL
-ARG BUILD_DATE
-ARG VCS_URL
-ARG VCS_REF
-
-LABEL maintainer="${MAINTAINER}" \
-	org.label-schema.build-date="${BUILD_DATE}" \
-	org.label-schema.name="${NAME}" \
-	org.label-schema.description="${DESCRIPTION}" \
-	org.label-schema.url="${URL}" \
-	org.label-schema.vcs-ref="${VCS_REF}" \
-	org.label-schema.vcs-url="${VCS_URL}" \
-	org.label-schema.schema-version="1.0"
+ENTRYPOINT ["/usr/local/bin/docker_entrypoint.sh"]

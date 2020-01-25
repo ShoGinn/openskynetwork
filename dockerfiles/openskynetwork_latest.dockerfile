@@ -29,15 +29,15 @@ RUN \
 # TARGETARCH is used to identify which version of opensky to download
 ARG TARGETARCH
 
-RUN if [ "${TARGETARCH}" = "arm" ]; then \
+RUN if [ "${TARGETARCH}" = "linux/arm/v6" -o "${TARGETARCH}" = "linux/arm/v7" ]; then \
 		echo "Downloading arm version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_armhf.deb"; \
 	fi; \
-    if [ "${TARGETARCH}" = "arm64" ]; then \
+    if [ "${TARGETARCH}" = "linux/arm64" ]; then \
 	echo "Downloading arm64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_arm64.deb"; \
 	fi; \
-    if [ "${TARGETARCH}" = "amd64" ]; then \
+    if [ "${TARGETARCH}" = "linux/amd64" ]; then \
 	echo "Downloading amd64 version" ; \
 		curl --output /tmp/opensky-feeder.deb "https://opensky-network.org/files/firmware/opensky-feeder_latest_amd64.deb"; \
 	fi; \
